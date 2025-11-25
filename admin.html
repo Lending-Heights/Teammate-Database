@@ -1,86 +1,99 @@
+<!-- admin.html -->
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Teammate Admin</title>
-  <link rel="stylesheet" href="./styles.css" />
-  <style>
-    .admin-wrap{max-width:820px;margin:32px auto;padding:24px;border-radius:16px;background:#fff;box-shadow:0 8px 30px rgba(0,0,0,.06)}
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    label{display:flex;flex-direction:column;font-weight:600;color:#6b7280;margin-bottom:10px}
-    input,select{padding:10px 12px;border:1px solid #d1d5db;border-radius:10px;font:inherit}
-    button{background:#0058A9;color:#fff;border:0;border-radius:10px;padding:10px 16px;font-weight:700;cursor:pointer}
-    .muted{color:#6b7280;font-size:13px}
-    .ok{color:#15803d}.warn{color:#b45309}.err{color:#dc2626}
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin • Teammate Database</title>
+  <link rel="stylesheet" href="./styles.css">
 </head>
-<body>
-  <main class="admin-wrap">
-    <h1>Add a Teammate</h1>
-    <p class="muted">This writes to <code>data/team.json</code> on <code>main</code>. Token is stored locally in this browser only.</p>
-
-    <details open>
-      <summary><strong>GitHub token</strong></summary>
-      <label>Token
-        <input id="ghToken" type="password" placeholder="Paste your GitHub PAT" />
-      </label>
-      <div style="display:flex;gap:8px;align-items:center;margin-bottom:16px">
-        <button id="saveToken" type="button">Save token</button>
-        <button id="clearToken" type="button">Clear</button>
-        <span id="tokenStatus" class="muted"></span>
-      </div>
-    </details>
-
-    <form id="newTeammate" autocomplete="off">
-      <div class="row">
-        <label>Slug* <input name="slug" required placeholder="cody-hedges" pattern="[a-z0-9-]+" /></label>
-        <label>Name* <input name="name" required placeholder="Cody Hedges" /></label>
-      </div>
-
-      <div class="row">
-        <label>Role*
-          <select name="role" required>
-            <option value="lo">Loan Officer</option>
-            <option value="ops">Operations</option>
-            <option value="lead">Leadership</option>
-          </select>
+<body class="admin-body">
+  <main class="wrap admin" id="admin">
+    <section id="admin-login" class="admin-card">
+      <h1>Admin Login</h1>
+      <p>Enter the administrator password to manage teammates.</p>
+      <form id="login-form">
+        <label>
+          Password
+          <input type="password" name="password" required autocomplete="current-password" />
         </label>
-        <label>Job Title <input name="jobTitle" placeholder="Branch Manager" /></label>
+        <button type="submit">Sign in</button>
+        <p class="form-hint" id="login-error" role="alert"></p>
+      </form>
+    </section>
+
+    <section id="admin-panel" class="admin-card" hidden>
+      <header class="admin-panel-header">
+        <h1>Teammate Manager</h1>
+        <button type="button" id="logout">Log out</button>
+      </header>
+
+      <div class="admin-layout">
+        <aside>
+          <label class="stack">
+            Select teammate
+            <select id="teammate-select">
+              <option value="">➕ New teammate</option>
+            </select>
+          </label>
+          <button type="button" id="delete" class="danger" disabled>Delete selected</button>
+        </aside>
+
+        <form id="teammate-form" novalidate>
+          <div class="grid-2">
+            <label>Order<input name="order" type="number" min="0"></label>
+            <label>Slug*<input name="slug" required pattern="[a-z0-9-]+"></label>
+            <label>Name*<input name="name" required></label>
+            <label>Role<select name="role" required>
+              <option value="lead">Leadership</option>
+              <option value="lo">Loan Officer</option>
+              <option value="ops">Operations</option>
+            </select></label>
+            <label>Job Title<input name="jobTitle"></label>
+            <label>NMLS<input name="nmls"></label>
+            <label>Phone<input name="phone" type="tel"></label>
+            <label>Email<input name="email" type="email"></label>
+            <label>Location<input name="location"></label>
+            <label>Hire Date<input name="hireDate" type="date"></label>
+          </div>
+
+          <label>Bio<textarea name="bio" rows="4"></textarea></label>
+          <label>Specialties (comma separated)<input name="specialties"></label>
+          <label>Certifications (comma separated)<input name="certifications"></label>
+          <label>Languages (comma separated)<input name="languages"></label>
+          <label>Licensed States (comma separated)<input name="states"></label>
+          <label>Fun Fact<textarea name="funFact" rows="2"></textarea></label>
+
+          <fieldset>
+            <legend>Application & Professional Links</legend>
+            <label>Apply URL<input name="apply" type="url"></label>
+            <label>Calendly URL<input name="calendly" type="url"></label>
+            <label>LinkedIn URL<input name="linkedin" type="url"></label>
+            <label>Reviews URL<input name="reviews" type="url"></label>
+            <label>Personal Site URL<input name="personalSite" type="url"></label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Social Handles</legend>
+            <label>Facebook<input name="facebook" type="url"></label>
+            <label>Instagram<input name="instagram" type="url"></label>
+            <label>LinkedIn<input name="socialLinkedin" type="url"></label>
+            <label>Twitter<input name="twitter" type="url"></label>
+            <label>TikTok<input name="tiktok" type="url"></label>
+          </fieldset>
+
+          <label>Existing Photo Path<input name="photoFile" placeholder="uploads/example.png"></label>
+          <label>Upload New Photo<input name="photo" type="file" accept="image/*"></label>
+
+          <div class="form-actions">
+            <button type="submit" id="save">Save changes</button>
+            <p class="form-hint" id="form-status" role="status"></p>
+          </div>
+        </form>
       </div>
-
-      <div class="row">
-        <label>NMLS <input name="nmls" placeholder="NMLS#1699524" /></label>
-        <label>Phone (E.164) <input name="phone" placeholder="+18064455344" /></label>
-      </div>
-
-      <div class="row">
-        <label>Email <input name="email" type="email" placeholder="chedges@lhloans.com" /></label>
-        <label>Photo filename* <input name="photoFile" required placeholder="Cody%20Hedges.png" /></label>
-      </div>
-
-      <label>States (comma or space separated) <input name="states" placeholder="TX or PA,OH" /></label>
-
-      <details>
-        <summary class="muted">Optional links</summary>
-        <div class="row">
-          <label>Apply <input name="apply" type="url" /></label>
-          <label>Calendly <input name="calendly" type="url" /></label>
-        </div>
-        <div class="row">
-          <label>LinkedIn <input name="linkedin" type="url" /></label>
-          <label>Reviews <input name="reviews" type="url" /></label>
-        </div>
-        <label>Personal Site <input name="personalSite" type="url" /></label>
-      </details>
-
-      <div style="display:flex;gap:12px;align-items:center;margin-top:14px">
-        <button type="submit">Create teammate</button>
-        <span id="status" class="muted"></span>
-      </div>
-    </form>
+    </section>
   </main>
 
-  <script defer src="./admin.js"></script>
+  <script defer src="./app.js"></script>
 </body>
 </html>
