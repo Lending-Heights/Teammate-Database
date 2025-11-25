@@ -1,3 +1,4 @@
+<!-- admin.html -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -20,11 +21,13 @@
         <p class="form-hint" id="login-error" role="alert"></p>
       </form>
     </section>
+
     <section id="admin-panel" class="admin-card" hidden>
       <header class="admin-panel-header">
         <h1>Teammate Manager</h1>
         <button type="button" id="logout">Log out</button>
       </header>
+
       <div class="admin-layout">
         <aside>
           <label class="stack">
@@ -35,6 +38,7 @@
           </label>
           <button type="button" id="delete" class="danger" disabled>Delete selected</button>
         </aside>
+
         <form id="teammate-form" novalidate>
           <div class="grid-2">
             <label>Order<input name="order" type="number" min="0"></label>
@@ -52,12 +56,14 @@
             <label>Location<input name="location"></label>
             <label>Hire Date<input name="hireDate" type="date"></label>
           </div>
+
           <label>Bio<textarea name="bio" rows="4"></textarea></label>
           <label>Specialties (comma separated)<input name="specialties"></label>
           <label>Certifications (comma separated)<input name="certifications"></label>
           <label>Languages (comma separated)<input name="languages"></label>
           <label>Licensed States (comma separated)<input name="states"></label>
           <label>Fun Fact<textarea name="funFact" rows="2"></textarea></label>
+
           <fieldset>
             <legend>Application & Professional Links</legend>
             <label>Apply URL<input name="apply" type="url"></label>
@@ -66,6 +72,7 @@
             <label>Reviews URL<input name="reviews" type="url"></label>
             <label>Personal Site URL<input name="personalSite" type="url"></label>
           </fieldset>
+
           <fieldset>
             <legend>Social Handles</legend>
             <label>Facebook<input name="facebook" type="url"></label>
@@ -74,8 +81,10 @@
             <label>Twitter<input name="twitter" type="url"></label>
             <label>TikTok<input name="tiktok" type="url"></label>
           </fieldset>
+
           <label>Existing Photo Path<input name="photoFile" placeholder="uploads/example.png"></label>
           <label>Upload New Photo<input name="photo" type="file" accept="image/*"></label>
+
           <div class="form-actions">
             <button type="submit" id="save">Save changes</button>
             <p class="form-hint" id="form-status" role="status"></p>
@@ -84,6 +93,7 @@
       </div>
     </section>
   </main>
+
   <script defer src="./app.js"></script>
 </body>
 </html>
